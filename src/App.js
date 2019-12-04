@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import words from './data/CpuRandom.json'
+import Player1 from './components/Player1.jsx'
+import Player2 from './components/Player2'
+import ResultAndReset from './components/ResultAndReset'
 
 const App = () => {
 
@@ -7,9 +10,8 @@ const App = () => {
   const [action2, setAction2] = useState(words[Math.floor(Math.random() * words.length)])
   const [result, setResult] = useState('')
 
-
   const checkPlayerAction1 = playerAction1 => {
-    console.log(playerAction1)
+
     if (playerAction1 === 'rock1') {
       setAction1(playerAction1)
     }
@@ -22,35 +24,11 @@ const App = () => {
  
   }
 
-  // const checkPlayerAction2 = playerAction2 => {
-  //   console.log(playerAction2)
-  //   if (playerAction2 === 'rock2') {
-  //     setAction2(playerAction2)
-  //   }
-  //   else if (playerAction2 === 'paper2') {
-  //     setAction2(playerAction2)
-  //   }
-  //   else if (playerAction2 === 'scissors2') {
-  //     setAction2(playerAction2)
-  //   }
-  // }
 
-  useEffect(() => 
-  {
-    checkResult()
-  }, [checkPlayerAction1])
   const checkResult = () => {
 
     // draws 
-    if (action1 === 'rock1' && action2 === 'rock2') {
-      setResult('Draw')
-      
-    }
-    else if (action1 === 'paper1' && action2 === 'paper2') {
-      setResult('Draw')
-      
-    }
-    else if (action1 === 'scissors1' && action2 === 'scissors2') {
+    if (action1 === action2) {
       setResult('Draw')
       
     }
@@ -84,28 +62,30 @@ const App = () => {
     else if (action1 === 'scissors1'  && action2 === 'rock2' ) {
       setResult('User 2 Wins')
     }
-    console.log(result)
   }
 
-  const resetGame = () => {
-    setAction1('')
-    setResult('')
-    setAction2(words[Math.floor(Math.random() * words.length)])
-  }
+  useEffect(() => 
+  {
+   checkResult()
+  }, [checkPlayerAction1])
+
 
   return (
   <>
   <main>
-    <div>Player 1</div>
-    <button onClick={() => checkPlayerAction1('rock1')} disabled={action1 != ''}>Rock</button>
-    <button onClick={() => checkPlayerAction1('paper1')} disabled={action1 != ''}>Paper</button>
-    <button onClick={() => checkPlayerAction1('scissors1')} disabled={action1 != ''}>Scissors</button>
-    <div>{result}</div>
-    <div>Player 2</div>
-    <button disabled={true}>Rock</button>
-    <button disabled={true}>Paper</button>
-    <button disabled={true}>Scissors</button>
-    <button onClick={() => resetGame()} disabled={action1 === ''}>Reset</button>
+    <Player1
+    setAction1 = {setAction1}
+    action1 = {action1}
+    checkPlayerAction1 = {checkPlayerAction1}/>
+   <ResultAndReset 
+   result = {result}
+   action2 = {action2}
+   words = {words}
+   setResult = {setResult}
+   setAction1 = {setAction1}
+   setAction2 = {setAction2}
+   action1 = {action1}/>
+    <Player2/>
   </main>
   </>)
 }
